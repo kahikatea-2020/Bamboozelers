@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import Questions from './Questions'
 import request from 'superagent'
 
 const apiUrl = 'https://opentdb.com/api.php?amount=10&category=18&difficulty=easy'
@@ -11,7 +10,8 @@ class Computers extends React.Component {
 
     this.state = {
       score: 0,
-      results: []
+      results: [],
+      backgroundColor: 'white'
     }
   }
 
@@ -26,33 +26,56 @@ class Computers extends React.Component {
       })
   }
 
-  // resultHandler(count) {
-  //   this.state.score += count
-  //   console.log(this.state.score)
-  // }
 
-  render() {
-    return (
-      <div className="wrapper">
-        <h1>Computers</h1>
-        <h2>True or False?</h2>
-        {this.state.results.map((result, index) => {
-          return (
-            <div key={index} className="questionWrapper">
-              {result.question} 
-              <br/>
-                <button value='true' onClick={() => this.quizAnswerHandler}>True</button>
-                <button value='false' onClick={() => this.quizAnswerHandler}>False</button>
-            </div>
-          ) 
-        })
+  quizAnswerHandler(answer) {
+    let response = event.target.value
+    let startScore = this.state.score
+    
+    var buttonColor
+    
+    if (response === answer) {
+      startScore ++
+      buttonColor = "green"
+    } else {
+      buttonColor = "red"
       }
-      <Link to='/'>Home</Link>
-      </div>
-    );
-  }     
+      
+    this.setState({
+      score: startScore,
+      backgroundColor: buttonColor
+    })
+   }
+
+
+
+   
+  render() {
+
+    return (
+      <div>
+        <h1>True or False?</h1>
+        <h2>Computers</h2>
+         <h3 style={{backgroundColor: this.state.backgroundColor}}> Your Score: {this.state.score}</h3>
+        {
+          this.state.results.map((result, index) => {
+            return (
+              <div key={index} >
+                 {result.question} <br />
+
+                  <button 
+                    value='True' 
+                    onClick={()=> this.quizAnswerHandler(result.correct_answer)}>True
+                  </button>
+                
+                  <button value='False' onClick={() => this.quizAnswerHandler(result.correct_answer)}>False</button>
+              </div>
+            )
+          })
+        }
+        <Link to='/'>Home</Link>
+      </div >
+    )
+  }
 }
-
-
 
 export default Computers

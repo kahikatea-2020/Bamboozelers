@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import Questions from './Questions'
 import request from 'superagent'
 
 const apiUrl = 'https://opentdb.com/api.php?amount=10&category=23&difficulty=easy&type=boolean'
@@ -12,7 +11,8 @@ class History extends Component {
 
     this.state = {
       score: 0,
-      results: []
+      results: [],
+      backgroundColor: 'white'
     }
   }
 
@@ -27,35 +27,55 @@ class History extends Component {
       })
   }
 
-  // resultHandler(count) {
-  //   this.state.score += count
-  //   console.log(this.state.score)
-  // }
 
+  quizAnswerHandler(answer) {
+    let response = event.target.value
+    let startScore = this.state.score
+    
+    var buttonColor
+    
+    if (response === answer) {
+      startScore ++
+      buttonColor = "green"
+    } else {
+      buttonColor = "red"
+      }
+      
+    this.setState({
+      score: startScore,
+      backgroundColor: buttonColor
+    })
+   }
+
+
+
+   
   render() {
+
     return (
-      <div className='divHistory'>
-        <div classname='questionsWrapper'>
-          <h2>History</h2>
-          {/* <h3>Your Score: {this.state.count}</h3> */}
-          <h1>True or False?</h1>
-          {
-            this.state.results.map((result, index) => {
-              return (
-                <div key={index} >
-                  {result.question}
-                  <br />
-                  <button value='true'  className="buttonBoulean" onClick={() => this.quizAnswerHandler}>True</button>
-                  <button value='false' className="buttonBoulean"  onClick={() => this.quizAnswerHandler}>False</button>
-                </div>
-              )
-            })
-          }
-          <Link to='/'>Home</Link>
-        </div>
+      <div>
+        <h1>True or False?</h1>
+        <h2>History</h2>
+         <h3 style={{backgroundColor: this.state.backgroundColor}}> Your Score: {this.state.score}</h3>
+        {
+          this.state.results.map((result, index) => {
+            return (
+              <div key={index} >
+                 {result.question} <br />
+
+                  <button 
+                    value='True' 
+                    onClick={()=> this.quizAnswerHandler(result.correct_answer)}>True
+                  </button>
+                
+                  <button value='False' onClick={() => this.quizAnswerHandler(result.correct_answer)}>False</button>
+              </div>
+            )
+          })
+        }
+        <Link to='/'>Home</Link>
       </div >
     )
   }
 }
-
 export default History;
