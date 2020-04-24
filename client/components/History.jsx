@@ -45,8 +45,8 @@ class History extends Component {
                 <div key={index} >
                   {result.question}
                   <br />
-                  <button value='true' onClick={() => this.quizAnswerHandler}>True</button>
-                  <button value='false' onClick={() => this.quizAnswerHandler}>False</button>
+                  <button value='true'  className="buttonBoulean" onClick={() => this.quizAnswerHandler}>True</button>
+                  <button value='false' className="buttonBoulean"  onClick={() => this.quizAnswerHandler}>False</button>
                 </div>
               )
             })
